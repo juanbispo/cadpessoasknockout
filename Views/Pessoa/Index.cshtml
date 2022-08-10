@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Pessoa>
+
+
+<h1>Cadastro de Pessoas</h1>
+
+
+
+<hr />
+
+<table>
+    <thead>
+        <th>Id</th>
+        <th>Nome</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td data-bind="text: Id"></td>
+            <td data-bind="text: Nome"></td>
+        </tr>
+    </tbody>
+</table>
+
+
+<script type="text/javascript">
+
+
+function AppViewModel() {
+    this.Id = "Bert";
+    this.Nome = "Bertington";
+}
+
+
+ko.applyBindings(new AppViewModel());
+</script>
+
