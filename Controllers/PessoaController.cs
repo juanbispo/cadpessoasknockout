@@ -5,7 +5,12 @@ namespace CadPessoas.Controllers
 {
     public class PessoaController : Controller
     {
-        public IActionResult Index()
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public JsonResult GetPessoas()
         {
             List<Pessoa> lista = new List<Pessoa>();
 
@@ -16,7 +21,7 @@ namespace CadPessoas.Controllers
                 Nome = "Juan"
             });
 
-            return View(lista);
+            return Json(lista);
         }
     }
 }

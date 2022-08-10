@@ -4,32 +4,68 @@
 <h1>Cadastro de Pessoas</h1>
 
 
-
 <hr />
 
 <table>
     <thead>
-        <th>Id</th>
-        <th>Nome</th>
+    <th>Id</th>
+    <th>Nome</th>
     </thead>
-    <tbody>
+    <tbody data-bind="foreach : Pessoas">
         <tr>
-            <td data-bind="text: Id"></td>
-            <td data-bind="text: Nome"></td>
+            <td data-bind="text: id"></td>
+            <td data-bind="text: nome"></td>
         </tr>
     </tbody>
 </table>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script src="~/lib/knockout/knockout-3.5.1.js" type="text/javascript"></script>
+
+
 
 
 <script type="text/javascript">
 
 
-function AppViewModel() {
-    this.Id = "Bert";
-    this.Nome = "Bertington";
-}
+    function AppViewModel() {
+
+        var self = this;
+        self.id = ko.observable("");
+        self.nome = ko.observable("");
 
 
-ko.applyBindings(new AppViewModel());
+        var Pessoa = {
+            id: self.id,
+            nome: self.nome
+        };
+
+        self.Pessoa = ko.observable("");
+
+        self.Pessoas = ko.observableArray("");
+
+        GetFuncionarios();
+
+        function GetFuncionarios() {
+            // chamara Ajax para pegar todos os funcionarios
+            $.ajax({
+                type: "GET",
+                url: "/Pessoa/GetPessoas",
+                contentType: "application/json; charset=utf-8",
+                dataType:'json',
+                success: function(data) {
+                    console.log(data);
+                    self.Pessoas(data); //Poe a resposta no ObservableArray
+                },
+                error: function(error) {
+                    alert(error.status + "<--and--> " + error.statusText);
+                }
+            });
+            //fim
+        }
+    }
+
+    ko.applyBindings(new AppViewModel());
 </script>
 
