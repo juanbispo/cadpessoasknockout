@@ -17,7 +17,7 @@ namespace CadPessoas.Controllers
         {
             return View();
         }
-
+        [HttpGet]
         public JsonResult GetPessoas()
         {
             try { 
@@ -29,6 +29,18 @@ namespace CadPessoas.Controllers
             {
                 return Json(e.Message);
             }
+        }
+
+        [HttpPost]
+        public IActionResult CreatePessoa(Pessoa pessoa)
+        {
+            if (pessoa.Nome is null)
+            {
+                return BadRequest();
+            }
+            _context.Add(pessoa);
+            _context.SaveChanges();
+            return Ok(pessoa);
         }
     }
 }

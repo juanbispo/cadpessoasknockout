@@ -1,7 +1,13 @@
-﻿@model IEnumerable<Pessoa>
+﻿@model Pessoa
 
 
 <h1>Cadastro de Pessoas</h1>
+
+<form>
+    <input type="text" data-bind="value: id" disabled="disabled" />
+    <input type="text" data-bind="value: nome" />
+    <button type="submit" data-bind="click : addPessoa">Salvar</button>
+</form>
 
 
 <hr />
@@ -32,28 +38,27 @@
     function AppViewModel() {
 
         var self = this;
-        self.id = ko.observable("");
-        self.nome = ko.observable("");
-
+        self.id = ko.observable();
+        self.nome = ko.observable();
 
         var Pessoa = {
-            id: self.id,
-            nome: self.nome
+            Id: self.id,
+            Nome: self.nome
         };
 
         self.Pessoa = ko.observable("");
 
         self.Pessoas = ko.observableArray("");
 
-        GetFuncionarios();
+        GetPessoas();
 
-        function GetFuncionarios() {
+        function GetPessoas() {
             // chamara Ajax para pegar todos os funcionarios
             $.ajax({
                 type: "GET",
                 url: "/Pessoa/GetPessoas",
                 contentType: "application/json; charset=utf-8",
-                dataType:'json',
+                dataType: 'json',
                 success: function(data) {
                     console.log(data);
                     self.Pessoas(data); //Poe a resposta no ObservableArray
@@ -62,7 +67,28 @@
                     alert(error.status + "<--and--> " + error.statusText);
                 }
             });
-            //fim
+        }
+        //fim
+
+        self.addPessoa = function() {
+
+            console.log(Pessoa);
+            $.ajax({
+                url: "/Pessoa/CreatePessoa",
+                type: "POST",               
+                data: ko.toJSON(Pessoa), //problema é que não chega pro meu controller essa informação
+                contentType: "application/json; charset=utf-8",
+                dataType:'json',
+                success: function(data) {
+                    alert("Registro incluído com sucesso");
+                    self.id(data.id);
+                    alert("O novo ID da Pessoa :" + self.id());
+                    GetPessoas();
+                },
+                error: function() {
+                    alert("Falhou");
+                }
+            });
         }
     }
 
