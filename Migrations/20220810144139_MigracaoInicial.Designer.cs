@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CadPessoas.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220809195434_MigracaoInicial")]
+    [Migration("20220810144139_MigracaoInicial")]
     partial class MigracaoInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

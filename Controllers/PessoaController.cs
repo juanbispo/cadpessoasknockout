@@ -1,10 +1,18 @@
-﻿using CadPessoas.Models;
+﻿using CadPessoas.Data;
+using CadPessoas.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CadPessoas.Controllers
 {
     public class PessoaController : Controller
     {
+        private readonly AppDbContext _context;
+
+        public PessoaController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -12,16 +20,15 @@ namespace CadPessoas.Controllers
 
         public JsonResult GetPessoas()
         {
-            List<Pessoa> lista = new List<Pessoa>();
+            try { 
+                var lista = _context.Pessoas;
 
-
-            lista.Add(new Pessoa
+                return Json(lista);
+            }
+            catch(Exception e)
             {
-                Id = 1,
-                Nome = "Juan"
-            });
-
-            return Json(lista);
+                return Json(e.Message);
+            }
         }
     }
 }
