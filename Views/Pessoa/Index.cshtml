@@ -1,30 +1,31 @@
 ﻿@model Pessoa
 
+<div>
+    <h1>Cadastro de Pessoas</h1>
 
-<h1>Cadastro de Pessoas</h1>
-
-<form>
-    <input type="text" data-bind="value: id" disabled="disabled" />
-    <input type="text" data-bind="value: nome" />
-    <button type="submit" data-bind="click : addPessoa">Salvar</button>
-</form>
-
+    <form data-bind="submit: addPessoa" >
+        <input name="Id" type="text" data-bind="value: id" disabled="disabled" />
+        <input name="Nome" type="text" data-bind="value: nome" />
+        <button type="submit">Salvar</button>
+    </form>
+</div>
 
 <hr />
 
-<table>
-    <thead>
-    <th>Id</th>
-    <th>Nome</th>
-    </thead>
-    <tbody data-bind="foreach : Pessoas">
-        <tr>
-            <td data-bind="text: id"></td>
-            <td data-bind="text: nome"></td>
-        </tr>
-    </tbody>
-</table>
-
+<div>
+    <table>
+        <thead>
+        <th>Id</th>
+        <th>Nome</th>
+        </thead>
+        <tbody data-bind="foreach : Pessoas">
+            <tr>
+                <td data-bind="text: id"></td>
+                <td data-bind="text: nome"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
 <script src="~/lib/knockout/knockout-3.5.1.js" type="text/javascript"></script>
@@ -38,17 +39,17 @@
     function AppViewModel() {
 
         var self = this;
-        self.id = ko.observable();
-        self.nome = ko.observable();
+        self.id = ko.observable(0);
+        self.nome = ko.observable("");
 
         var Pessoa = {
-            Id: self.id,
-            Nome: self.nome
+            id : self.id,
+            nome : self.nome
         };
 
-        self.Pessoa = ko.observable("");
+        self.Pessoa = ko.observable();
 
-        self.Pessoas = ko.observableArray("");
+        self.Pessoas = ko.observableArray([]);
 
         GetPessoas();
 
@@ -70,20 +71,21 @@
         }
         //fim
 
-        self.addPessoa = function() {
+        addPessoa = function() {
 
             console.log(Pessoa);
+            console.log(ko.toJSON(Pessoa));
+
+
             $.ajax({
-                url: "/Pessoa/CreatePessoa",
-                type: "POST",               
+                type: "POST",
+                url: "/Pessoa/CreatePessoa/",                
                 data: ko.toJSON(Pessoa), //problema é que não chega pro meu controller essa informação
                 contentType: "application/json; charset=utf-8",
                 dataType:'json',
                 success: function(data) {
+                    self.Pessoas.push(data);
                     alert("Registro incluído com sucesso");
-                    self.id(data.id);
-                    alert("O novo ID da Pessoa :" + self.id());
-                    GetPessoas();
                 },
                 error: function() {
                     alert("Falhou");

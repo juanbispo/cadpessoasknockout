@@ -32,15 +32,12 @@ namespace CadPessoas.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreatePessoa(Pessoa pessoa)
+        public JsonResult CreatePessoa([FromBody]Pessoa pessoa)
         {
-            if (pessoa.Nome is null)
-            {
-                return BadRequest();
-            }
-            _context.Add(pessoa);
+            _context.Pessoas.Add(pessoa);
             _context.SaveChanges();
-            return Ok(pessoa);
+
+            return Json(pessoa);
         }
     }
 }
