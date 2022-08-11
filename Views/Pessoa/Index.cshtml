@@ -3,8 +3,7 @@
 <div>
     <h1>Cadastro de Pessoas</h1>
 
-    <form data-bind="submit: addPessoa" >
-        <input name="Id" type="text" data-bind="value: id" disabled="disabled" />
+    <form data-bind="submit: addPessoa">
         <input name="Nome" type="text" data-bind="value: nome" />
         <button type="submit">Salvar</button>
     </form>
@@ -20,8 +19,11 @@
         </thead>
         <tbody data-bind="foreach : Pessoas">
             <tr>
-                <td data-bind="text: id"></td>
                 <td data-bind="text: nome"></td>
+                <td>
+                    <button data-bind="click: deletePessoa">Excluir</button>
+                    <button>Editar</button>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -43,8 +45,8 @@
         self.nome = ko.observable("");
 
         var Pessoa = {
-            id : self.id,
-            nome : self.nome
+            id: self.id,
+            nome: self.nome
         };
 
         self.Pessoa = ko.observable();
@@ -68,7 +70,7 @@
                     alert(error.status + "<--and--> " + error.statusText);
                 }
             });
-        }
+        };
         //fim
 
         addPessoa = function() {
@@ -79,13 +81,60 @@
 
             $.ajax({
                 type: "POST",
-                url: "/Pessoa/CreatePessoa/",                
+                url: "/Pessoa/CreatePessoa/",
                 data: ko.toJSON(Pessoa), //problema é que não chega pro meu controller essa informação
                 contentType: "application/json; charset=utf-8",
-                dataType:'json',
+                dataType: 'json',
                 success: function(data) {
                     self.Pessoas.push(data);
+                    self.nome("");
                     alert("Registro incluído com sucesso");
+                },
+                error: function() {
+                    alert("Falhou");
+                }
+            });
+        };
+
+        deletePessoa = function(Pessoa) {
+            if (confirm("Tem certeza que deseja apagar a pessoa?")) {
+                var id = Pessoa.id;
+                console.log(id);
+                $.ajax({
+                    type: "DELETE",
+                    url: "/Pessoa/DeletePessoa/",
+                    data: ko.toJSON(id), //problema é que não chega pro meu controller essa informação
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    success: function(data) {
+                        self.Pessoas.remove(Pessoa);
+                        alert("Registro excluido com sucesso");
+                    },
+                    error: function() {
+                        alert("Falhou");
+                    }
+                });
+            }
+        };
+
+        editPessoa = function(Pessoa) {
+            self.Pessoas(Pessoa);
+        };
+
+        updatePessoa = function() {
+            var pessoa = self.Pessoa();
+
+            $.ajax({
+                type: "PUT",
+                url: "/Pessoa/UpdatePessoa/",
+                data: ko.toJSON(Pessoa), //problema é que não chega pro meu controller essa informação
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                success: function(data) {
+                    self.Pessoas.removeAll(Produto);
+                    self.Pessoas(data);
+                    self.Pessoa(null);
+                    alert('Registro Atualizado');
                 },
                 error: function() {
                     alert("Falhou");

@@ -39,5 +39,15 @@ namespace CadPessoas.Controllers
 
             return Json(pessoa);
         }
+
+        [HttpDelete]
+        public JsonResult DeletePessoa([FromBody]int id)
+        {
+            var rmvPessoa = _context.Pessoas.SingleOrDefault(p=>p.Id == id);
+            _context.Pessoas.Remove(rmvPessoa);
+            _context.SaveChanges();
+
+            return Json(rmvPessoa);
+        }
     }
 }
