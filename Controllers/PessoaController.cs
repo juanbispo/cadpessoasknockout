@@ -21,30 +21,42 @@ namespace CadPessoas.Controllers
         [HttpGet]
         public JsonResult GetPessoas()
         {
-            try { 
+            try
+            {
                 var lista = _context.Pessoas;
 
                 return Json(lista);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Json(e.Message);
             }
         }
 
         [HttpPost]
-        public JsonResult CreatePessoa([FromBody]Pessoa pessoa)
+        public JsonResult CreatePessoa([FromBody] Pessoa pessoa)
         {
-            _context.Pessoas.Add(pessoa);
-            _context.SaveChanges();
+            try
+            {
+                if (string.IsNullOrEmpty(pessoa.Nome))
+                {
+                    throw new Exception();
+                }
+                _context.Pessoas.Add(pessoa);
+                _context.SaveChanges();
 
-            return Json(pessoa);
+                return Json(pessoa);
+            }
+            catch (Exception e)
+            {
+                return Json(e.Message);
+            }
         }
 
         [HttpDelete]
-        public JsonResult DeletePessoa([FromBody]int id)
+        public JsonResult DeletePessoa([FromBody] int id)
         {
-            var rmvPessoa = _context.Pessoas.SingleOrDefault(p=>p.Id == id);
+            var rmvPessoa = _context.Pessoas.SingleOrDefault(p => p.Id == id);
             _context.Pessoas.Remove(rmvPessoa);
             _context.SaveChanges();
 

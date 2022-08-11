@@ -1,39 +1,41 @@
-﻿@model Pessoa
-
+﻿
 
 <div id="container">
     <div class="row">
-        <div id="inputPessoas" class="col-4">
+        <div id="inputPessoas" class="col-2">
             <h1>Cadastrar</h1>
             <form data-bind="submit: addPessoa">
                 <input name="Nome" type="text" data-bind="value: nome" />
-                <button type="submit">Salvar</button>
+                <hr />
+                <button class="btn btn-primary" type="submit">Salvar</button>
             </form>
         </div>
-        <div id="listaPessoas" class="col-4">
+        <div id="listaPessoas" class="col-8">
             <h1>Pessoas</h1>
-            <table>
+            <table class="table table-striped">
                 <thead>
                 <th>Nome</th>
+                <th>Ações</th>
                 </thead>
                 <tbody data-bind="foreach : Pessoas">
                     <tr>
                         <td data-bind="text: nome"></td>
                         <td>
-                            <button data-bind="click: deletePessoa">Excluir</button>
-                            <button data-bind="click: editPessoa">Editar</button>
+                            <button class="btn btn-danger" data-bind="click: deletePessoa">Excluir</button>
+                            <button class="btn btn-primary" data-bind="click: editPessoa">Editar</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <div id="editPessoas" class="col-4" data-bind="if: Pessoa">
+        <div id="editPessoas" class="col-2" data-bind="if: Pessoa">
 
             <h1>Editar </h1>
             <form data-bind="submit: updatePessoa">
                 <input name="Nome" type="text" data-bind="value: Pessoa().nome" style="" />
-                <button type="submit">Salvar</button>
+                <hr />
+                <button class="btn btn-primary" type="submit">Salvar</button>
             </form>
         </div>
 
@@ -87,21 +89,26 @@
 
         addPessoa = function() {
 
-            $.ajax({
-                type: "POST",
-                url: "/Pessoa/CreatePessoa/",
-                data: ko.toJSON(Pessoa),
-                contentType: "application/json; charset=utf-8",
-                dataType: 'json',
-                success: function(data) {
-                    self.Pessoas.push(data);
-                    self.nome("");
-                    alert("Registro incluído com sucesso");
-                },
-                error: function() {
-                    alert("Falhou");
-                }
-            });
+            if (Pessoa.nome() != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "/Pessoa/CreatePessoa/",
+                    data: ko.toJSON(Pessoa),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: 'json',
+                    success: function(data) {
+                        self.Pessoas.push(data);
+                        self.nome("");
+                        alert("Registro incluído com sucesso");
+                    },
+                    error: function() {
+                        alert("Falhou");
+                    }
+                });
+            }
+            else{
+                alert("Informe um nome ");
+            }
         };
 
         deletePessoa = function(Pessoa) {
@@ -111,7 +118,7 @@
                 $.ajax({
                     type: "DELETE",
                     url: "/Pessoa/DeletePessoa/",
-                    data: ko.toJSON(id), 
+                    data: ko.toJSON(id),
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     success: function(data) {
