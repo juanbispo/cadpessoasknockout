@@ -1,32 +1,44 @@
 ﻿@model Pessoa
 
-<div>
-    <h1>Cadastro de Pessoas</h1>
 
-    <form data-bind="submit: addPessoa">
-        <input name="Nome" type="text" data-bind="value: nome" />
-        <button type="submit">Salvar</button>
-    </form>
-</div>
+<div id="container">
+    <div class="row">
+        <div id="inputPessoas" class="col-4">
+            <h1>Cadastrar</h1>
+            <form data-bind="submit: addPessoa">
+                <input name="Nome" type="text" data-bind="value: nome" />
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+        <div id="listaPessoas" class="col-4">
+            <h1>Pessoas</h1>
+            <table>
+                <thead>
+                <th>Nome</th>
+                </thead>
+                <tbody data-bind="foreach : Pessoas">
+                    <tr>
+                        <td data-bind="text: nome"></td>
+                        <td>
+                            <button data-bind="click: deletePessoa">Excluir</button>
+                            <button data-bind="click: editPessoa">Editar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-<hr />
+        <div id="editPessoas" class="col-4" data-bind="if: Pessoa">
 
-<div>
-    <table>
-        <thead>
-        <th>Id</th>
-        <th>Nome</th>
-        </thead>
-        <tbody data-bind="foreach : Pessoas">
-            <tr>
-                <td data-bind="text: nome"></td>
-                <td>
-                    <button data-bind="click: deletePessoa">Excluir</button>
-                    <button>Editar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+            <h1>Editar </h1>
+            <form data-bind="submit: updatePessoa">
+                <input name="Nome" type="text" data-bind="value: Pessoa().nome" style="" />
+                <button type="submit">Salvar</button>
+            </form>
+        </div>
+
+
+    </div>
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
@@ -56,7 +68,7 @@
         GetPessoas();
 
         function GetPessoas() {
-            // chamara Ajax para pegar todos os funcionarios
+
             $.ajax({
                 type: "GET",
                 url: "/Pessoa/GetPessoas",
@@ -64,7 +76,7 @@
                 dataType: 'json',
                 success: function(data) {
                     console.log(data);
-                    self.Pessoas(data); //Poe a resposta no ObservableArray
+                    self.Pessoas(data);
                 },
                 error: function(error) {
                     alert(error.status + "<--and--> " + error.statusText);
@@ -75,14 +87,10 @@
 
         addPessoa = function() {
 
-            console.log(Pessoa);
-            console.log(ko.toJSON(Pessoa));
-
-
             $.ajax({
                 type: "POST",
                 url: "/Pessoa/CreatePessoa/",
-                data: ko.toJSON(Pessoa), //problema é que não chega pro meu controller essa informação
+                data: ko.toJSON(Pessoa),
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 success: function(data) {
@@ -103,7 +111,7 @@
                 $.ajax({
                     type: "DELETE",
                     url: "/Pessoa/DeletePessoa/",
-                    data: ko.toJSON(id), //problema é que não chega pro meu controller essa informação
+                    data: ko.toJSON(id), 
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     success: function(data) {
@@ -118,22 +126,22 @@
         };
 
         editPessoa = function(Pessoa) {
-            self.Pessoas(Pessoa);
+            self.Pessoa(Pessoa);
         };
 
         updatePessoa = function() {
-            var pessoa = self.Pessoa();
+            var pessoa = self.Pessoa;
 
+            console.log(ko.toJSON(pessoa));
             $.ajax({
                 type: "PUT",
-                url: "/Pessoa/UpdatePessoa/",
-                data: ko.toJSON(Pessoa), //problema é que não chega pro meu controller essa informação
+                url: "/Pessoa/EditPessoa/",
+                data: ko.toJSON(pessoa),
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
                 success: function(data) {
-                    self.Pessoas.removeAll(Produto);
-                    self.Pessoas(data);
-                    self.Pessoa(null);
+                    self.Pessoa("");
+                    GetPessoas();
                     alert('Registro Atualizado');
                 },
                 error: function() {

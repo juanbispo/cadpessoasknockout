@@ -1,6 +1,7 @@
 ﻿using CadPessoas.Data;
 using CadPessoas.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CadPessoas.Controllers
 {
@@ -48,6 +49,16 @@ namespace CadPessoas.Controllers
             _context.SaveChanges();
 
             return Json(rmvPessoa);
+        }
+
+        [HttpPut]
+        public JsonResult EditPessoa([FromBody] Pessoa pessoa)
+        {
+            _context.Entry(pessoa).State = EntityState.Modified;
+
+            _context.SaveChanges();
+
+            return Json(pessoa);
         }
     }
 }
