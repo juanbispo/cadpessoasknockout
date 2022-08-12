@@ -42,6 +42,10 @@ namespace CadPessoas.Controllers
                 {
                     throw new Exception();
                 }
+                if (!pessoa.ValidaEmail())
+                {
+                    throw new Exception();
+                }
                 _context.Pessoas.Add(pessoa);
                 _context.SaveChanges();
 
@@ -49,7 +53,7 @@ namespace CadPessoas.Controllers
             }
             catch (Exception e)
             {
-                return Json(e.Message);
+                return Json(e);
             }
         }
 
@@ -66,11 +70,28 @@ namespace CadPessoas.Controllers
         [HttpPut]
         public JsonResult EditPessoa([FromBody] Pessoa pessoa)
         {
-            _context.Entry(pessoa).State = EntityState.Modified;
+            try
+            {
 
-            _context.SaveChanges();
+                if (string.IsNullOrEmpty(pessoa.Nome))
+                {
+                    throw new Exception();
+                }
+                if (!pessoa.ValidaEmail())
+                {
+                    throw new Exception();
+                }
+                _context.Entry(pessoa).State = EntityState.Modified;
 
-            return Json(pessoa);
+                _context.SaveChanges();
+
+                return Json(pessoa);
+
+            }
+            catch (Exception e)
+            {
+                return Json(e);
+            }
         }
     }
 }

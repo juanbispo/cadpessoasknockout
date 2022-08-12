@@ -1,11 +1,12 @@
 ﻿
 
-<div id="container">
+<div id="container-fluid">
     <div class="row">
         <div id="inputPessoas" class="col-2">
             <h1>Cadastrar</h1>
             <form data-bind="submit: addPessoa">
-                <input name="Nome" type="text" data-bind="value: nome" />
+                <input name="Nome" type="text" placeholder="Nome" data-bind="value: nome" />
+                <input name="Email" type="text" placeholder="E-mail" data-bind="value: email" />
                 <hr />
                 <button class="btn btn-primary" type="submit">Salvar</button>
             </form>
@@ -15,11 +16,13 @@
             <table class="table table-striped">
                 <thead>
                 <th>Nome</th>
+                <th>E-Mail</th>
                 <th>Ações</th>
                 </thead>
                 <tbody data-bind="foreach : Pessoas">
                     <tr>
                         <td data-bind="text: nome"></td>
+                        <td data-bind="text: email"></td>
                         <td>
                             <button class="btn btn-danger" data-bind="click: deletePessoa">Excluir</button>
                             <button class="btn btn-primary" data-bind="click: editPessoa">Editar</button>
@@ -29,13 +32,15 @@
             </table>
         </div>
 
-        <div id="editPessoas" class="col-2" data-bind="if: Pessoa">
+        <div id="editPessoas" data-bind="if: Pessoa" class="col-2" style="position:absolute;top:30%; left:40%;background-color:gainsboro;">
 
             <h1>Editar </h1>
             <form data-bind="submit: updatePessoa">
-                <input name="Nome" type="text" data-bind="value: Pessoa().nome" style="" />
+                <input name="Nome" type="text" placeholder="Nome" data-bind="value: Pessoa().nome" style="" />
+                <input name="Nome" type="text" placeholder="E-mail" data-bind="value: Pessoa().email" style="" />
                 <hr />
                 <button class="btn btn-primary" type="submit">Salvar</button>
+                <button class="btn btn-danger" data-bind="click: cancel">Voltar</button>
             </form>
         </div>
 
@@ -57,10 +62,12 @@
         var self = this;
         self.id = ko.observable(0);
         self.nome = ko.observable("");
+        self.email = ko.observable("");
 
         var Pessoa = {
             id: self.id,
-            nome: self.nome
+            nome: self.nome,
+            email: self.email
         };
 
         self.Pessoa = ko.observable();
@@ -99,14 +106,17 @@
                     success: function(data) {
                         self.Pessoas.push(data);
                         self.nome("");
+                        self.email("");
                         alert("Registro incluído com sucesso");
                     },
-                    error: function() {
-                        alert("Falhou");
+                    error: function(data) {
+                        alert("Insira um email válido e um nome válido");
+                        self.nome("");
+                        self.email("");
                     }
                 });
             }
-            else{
+            else {
                 alert("Informe um nome ");
             }
         };
@@ -152,10 +162,17 @@
                     alert('Registro Atualizado');
                 },
                 error: function() {
-                    alert("Falhou");
+                    alert("Insira um email válido e um nome válido")
+                    self.Pessoa("");
                 }
             });
         }
+
+
+        cancel = function() {
+            self.Pessoa("");
+        }
+
     }
 
     ko.applyBindings(new AppViewModel());
