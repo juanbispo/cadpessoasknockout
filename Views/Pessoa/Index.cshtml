@@ -4,7 +4,7 @@
     <div class="row">
         <div id="inputPessoas" class="col-2">
             <h1>Cadastrar</h1>
-            <form data-bind="submit: addPessoa" >
+            <form data-bind="submit: addPessoa">
                 <input style="margin:0 0 20px 0" name="Nome" type="text" placeholder="Nome" data-bind="value: nome" />
                 <input name="Email" type="text" placeholder="E-mail" data-bind="value: email" />
                 <hr />
@@ -29,6 +29,17 @@
                         </td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <h4> Total de Pessoas: </h4>
+                        </td>
+                        <td>
+                            <h4 data-bind="text: contador()"></h4>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
@@ -63,6 +74,10 @@
         self.id = ko.observable(0);
         self.nome = ko.observable("");
         self.email = ko.observable("");
+
+        self.contador = function() {
+            return self.Pessoas().length;
+        };
 
         var Pessoa = {
             id: self.id,
