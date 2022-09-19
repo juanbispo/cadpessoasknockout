@@ -1,5 +1,6 @@
 ﻿using CadPessoas.Data;
 using CadPessoas.Models;
+using CadPessoas.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,12 +8,13 @@ namespace CadPessoas.Controllers
 {
     public class PessoaController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IPessoaService _pessoaService;
 
-        public PessoaController(AppDbContext context)
+        public PessoaController(IPessoaService pessoaService)
         {
-            _context = context;
+            _pessoaService = pessoaService;
         }
+
 
         public ActionResult Index()
         {
@@ -23,7 +25,7 @@ namespace CadPessoas.Controllers
         {
             try
             {
-                var lista = _context.Pessoas;
+                var lista = _pessoaService.GetPessoas();
 
                 return Json(lista);
             }
@@ -38,17 +40,7 @@ namespace CadPessoas.Controllers
         {
             try
             {
-                if (string.IsNullOrEmpty(pessoa.Nome))
-                {
-                    throw new Exception();
-                }
-                if (!pessoa.ValidaEmail())
-                {
-                    throw new Exception();
-                }
-                _context.Pessoas.Add(pessoa);
-                _context.SaveChanges();
-
+                _pessoaService.AddPessoa(pessoa);
                 return Json(pessoa);
             }
             catch (Exception e)
@@ -60,31 +52,23 @@ namespace CadPessoas.Controllers
         [HttpDelete]
         public JsonResult DeletePessoa([FromBody] int id)
         {
-            var rmvPessoa = _context.Pessoas.SingleOrDefault(p => p.Id == id);
-            _context.Pessoas.Remove(rmvPessoa);
-            _context.SaveChanges();
-
-            return Json(rmvPessoa);
+            try
+            {             
+                return Json(_pessoaService.RemovePessoa(id));
+            }
+            catch(Exception e)
+            {
+                return Json(e);
+            }
+            
         }
 
         [HttpPut]
-        public JsonResult EditPessoa([FromBody] Pessoa pessoa)
+        public JsonResult EditPessoa([FromBody]Pessoa pessoa)
         {
             try
             {
-
-                if (string.IsNullOrEmpty(pessoa.Nome))
-                {
-                    throw new Exception();
-                }
-                if (!pessoa.ValidaEmail())
-                {
-                    throw new Exception();
-                }
-                _context.Entry(pessoa).State = EntityState.Modified;
-
-                _context.SaveChanges();
-
+                _pessoaService.EditPessoa(pessoa);              
                 return Json(pessoa);
 
             }

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "9SQBhUVHrFvOKYH2maB06o4//+vmS17OO3aVY9bfOnSz5DDUughXwCPj3WHwxsnQxvbuyNUTWzxFACHAIOozEQ==",
+  "dgSpecHash": "VYVa8mjBVtU4N6M86giWWzXRszKy97GPJM8rQveozVIjtDjilUibNcZaXc+d0eHoz/9r88f1qIJUauS5ckZU3A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoas\\CadPessoas.csproj",
+  "projectFilePath": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoasKnockout\\cadpessoasknockout\\CadPessoas.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Sale\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Sale\\.nuget\\packages\\knockoutjs\\3.5.1\\knockoutjs.3.5.1.nupkg.sha512",

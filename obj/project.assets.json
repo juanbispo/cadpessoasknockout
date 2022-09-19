@@ -1887,11 +1887,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoas\\CadPessoas.csproj",
+      "projectUniqueName": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoasKnockout\\cadpessoasknockout\\CadPessoas.csproj",
       "projectName": "CadPessoas",
-      "projectPath": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoas\\CadPessoas.csproj",
+      "projectPath": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoasKnockout\\cadpessoasknockout\\CadPessoas.csproj",
       "packagesPath": "C:\\Users\\Sale\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoas\\obj\\",
+      "outputPath": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoasKnockout\\cadpessoasknockout\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Sale\\AppData\\Roaming\\NuGet\\NuGet.Config",
