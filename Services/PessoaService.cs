@@ -38,6 +38,12 @@ namespace CadPessoas.Services
                 throw new Exception();
             }
         }
+        public List<Pessoa> GetPessoasByName(string searchString)
+        {
+            var pessoas = _context.Pessoas.Where(p=>p.Nome.ToLower().Contains(searchString.ToLower())).ToList();
+
+            return pessoas;
+        }
 
 
         public Pessoa RemovePessoa(int id)
@@ -76,5 +82,6 @@ namespace CadPessoas.Services
             }
             
         }
+
     }
 }

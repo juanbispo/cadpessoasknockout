@@ -1,4 +1,10 @@
 ﻿
+<div class="text-end mr-10">
+    <form data-bind="submit: getPessoasByName">
+        <input type="text" name="searchString" placeholder="Pesquisar por Nome" data-bind="value: searchString"/>
+        <input type="submit" class="btn btn-primary" value="Pesquisar"/>
+    </form>
+</div>
 
 <div id="container-fluid">
     <div class="row">
@@ -74,6 +80,8 @@
         self.id = ko.observable(0);
         self.nome = ko.observable("");
         self.email = ko.observable("");
+        self.searchString = ko.observable("");
+
 
         self.contador = function() {
             return self.Pessoas().length;
@@ -98,6 +106,25 @@
                 url: "/Pessoa/GetPessoas",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
+                success: function(data) {
+                    console.log(data);
+                    self.Pessoas(data);
+                },
+                error: function(error) {
+                    alert(error.status + "<--and--> " + error.statusText);
+                }
+            });
+        };
+
+        getPessoasByName =function() {
+
+            var searchString = self.searchString;
+            $.ajax({
+                type: "GET",
+                url: "/Pessoa/GetPessoasByName",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: {searchString : searchString},
                 success: function(data) {
                     console.log(data);
                     self.Pessoas(data);

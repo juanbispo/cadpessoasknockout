@@ -1887,11 +1887,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoasKnockout\\cadpessoasknockout\\CadPessoas.csproj",
+      "projectUniqueName": "C:\\Users\\Sale\\Desktop\\JUAN-ESTUDOS\\cadpessoasknockout\\CadPessoas.csproj",
       "projectName": "CadPessoas",
-      "projectPath": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoasKnockout\\cadpessoasknockout\\CadPessoas.csproj",
+      "projectPath": "C:\\Users\\Sale\\Desktop\\JUAN-ESTUDOS\\cadpessoasknockout\\CadPessoas.csproj",
       "packagesPath": "C:\\Users\\Sale\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Sale\\Desktop\\JUAN ESTUDOS\\C-SHARP\\CadPessoasKnockout\\cadpessoasknockout\\obj\\",
+      "outputPath": "C:\\Users\\Sale\\Desktop\\JUAN-ESTUDOS\\cadpessoasknockout\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Sale\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -1945,7 +1945,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -1957,7 +1958,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -8,6 +8,7 @@ namespace CadPessoas.Services
         public Pessoa RemovePessoa(int id);
         public List<Pessoa> GetPessoas();
 
+        public List<Pessoa> GetPessoasByName(string searchString);
         public void EditPessoa(Pessoa pessoa);
     }
 }
