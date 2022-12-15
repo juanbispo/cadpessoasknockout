@@ -1,8 +1,8 @@
 ﻿
-<div class="text-start ml-10">
-    <button data-bind="click:createModeButton" class="btn btn-primary">Cadastrar</button>
+<div class="text-start">
+    <button data-bind="click:createModeButton" class="btn btn-primary btn-lg">Cadastrar</button>
 </div>
-<div class="text-end mr-10">
+<div class="text-center">
     <form data-bind="submit: getPessoasByName">
         <input type="text" name="searchString" placeholder="Pesquisar por Nome" data-bind="value: searchString" />
         <input type="submit" class="btn btn-primary" value="Pesquisar" />
@@ -53,7 +53,7 @@
             <h1 class="text-center">Editar </h1>
             <form data-bind="submit: updatePessoa">
                 <input name="Nome" type="text" placeholder="Nome" data-bind="value: Pessoa().nome" class="form-control" />
-                <input name="Email" type="text" placeholder="E-mail" data-bind="value: Pessoa().email" class="form-control" />
+                <input name="Email" type="email" placeholder="E-mail" data-bind="value: Pessoa().email" class="form-control" />
                 <input name="Cpf" type="text" placeholder="CPF" data-bind="value: Pessoa().cpf" class="form-control" />
                 <input name="Nascimento" type="date" placeholder="Data de Nascimento" data-bind="value: Pessoa().nascimento" class="form-control" />
                 <hr />
@@ -68,7 +68,7 @@
             <h1 class="text-center">Cadastrar</h1>
             <form data-bind="submit: addPessoa">
                 <input name="Nome" type="text" placeholder="Nome" data-bind="value: nome" class="form-control" />
-                <input name="Email" type="text" placeholder="E-mail" data-bind="value: email" class="form-control" />
+                <input name="Email" type="email" placeholder="E-mail" data-bind="value: email" class="form-control" />
                 <input name="Cpf" type="text" placeholder="CPF" data-bind="value: cpf" class="form-control" />
                 <input name="Nascimento" type="date" placeholder="Data de Nascimento" data-bind="value: nascimento" class="form-control" />
                 <hr />
@@ -151,6 +151,7 @@
                 success: function(data) {
                     console.log(data);
                     self.Pessoas(data);
+                    self.searchString("");
                 },
                 error: function(error) {
                     alert(error.status + "<--and--> " + error.statusText);
@@ -187,7 +188,7 @@
                 });
             }
             else {
-                alert("Informe um nome ");
+                alert("Insira dados válidos!");
             }
         };
 
@@ -231,8 +232,8 @@
                     GetPessoas();
                     alert('Registro Atualizado');
                 },
-                error: function() {
-                    alert("Insira um email válido e um nome válido")
+                error: function(data) {
+                    alert("Falhou!");
                     self.Pessoa("");
                 }
             });

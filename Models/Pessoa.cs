@@ -17,7 +17,7 @@ namespace CadPessoas.Models
 
         public string? Cpf { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "0:dd/MM/yyyy")]
         [DataType(DataType.Date)]
         public DateTime? Nascimento { get; set; }
 

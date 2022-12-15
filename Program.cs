@@ -1,6 +1,8 @@
 using CadPessoas.Data;
 using CadPessoas.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
