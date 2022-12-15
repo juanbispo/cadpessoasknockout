@@ -63,12 +63,13 @@ namespace CadPessoas.Controllers
         {
             try
             {
+                    
                 _pessoaService.AddPessoa(pessoa);
                 return Json(pessoa);
             }
             catch (Exception e)
             {
-                return Json(e);
+                return Json(e.Message);
             }
         }
 

@@ -1,34 +1,33 @@
 ﻿
+<div class="text-start ml-10">
+    <button data-bind="click:createModeButton" class="btn btn-primary">Cadastrar</button>
+</div>
 <div class="text-end mr-10">
     <form data-bind="submit: getPessoasByName">
-        <input type="text" name="searchString" placeholder="Pesquisar por Nome" data-bind="value: searchString"/>
-        <input type="submit" class="btn btn-primary" value="Pesquisar"/>
+        <input type="text" name="searchString" placeholder="Pesquisar por Nome" data-bind="value: searchString" />
+        <input type="submit" class="btn btn-primary" value="Pesquisar" />
     </form>
 </div>
 
 <div id="container-fluid">
     <div class="row">
-        <div id="inputPessoas" class="col-2">
-            <h1>Cadastrar</h1>
-            <form data-bind="submit: addPessoa">
-                <input style="margin:0 0 20px 0" name="Nome" type="text" placeholder="Nome" data-bind="value: nome" />
-                <input name="Email" type="text" placeholder="E-mail" data-bind="value: email" />
-                <hr />
-                <button class="btn btn-primary" type="submit">Salvar</button>
-            </form>
-        </div>
-        <div id="listaPessoas" class="col-8">
+
+        <div id="listaPessoas" class="col-12">
             <h1>Pessoas</h1>
             <table class="table table-striped">
                 <thead>
                 <th>Nome</th>
                 <th>E-Mail</th>
+                <th>CPF</th>
+                <th>Data de Nascimento</th>
                 <th>Ações</th>
                 </thead>
                 <tbody data-bind="foreach : Pessoas">
                     <tr>
                         <td data-bind="text: nome"></td>
                         <td data-bind="text: email"></td>
+                        <td data-bind="text: cpf"</td>
+                        <td data-bind="text: nascimento"></td>
                         <td>
                             <button class="btn btn-danger" data-bind="click: deletePessoa">Excluir</button>
                             <button class="btn btn-primary" data-bind="click: editPessoa">Editar</button>
@@ -49,19 +48,36 @@
             </table>
         </div>
 
-        <div id="editPessoas" data-bind="if: Pessoa" class="col-2" style="position:absolute;top:30%; left:40%;background-color:gainsboro;">
+        <div id="editPessoas" data-bind="if: Pessoa" style="position:absolute;left:35%;background-color:gainsboro; width:600px">
 
-            <h1>Editar </h1>
+            <h1 class="text-center">Editar </h1>
             <form data-bind="submit: updatePessoa">
-                <input style="margin:10px 0" name="Nome" type="text" placeholder="Nome" data-bind="value: Pessoa().nome" style="" />
-                <input name="Nome" type="text" placeholder="E-mail" data-bind="value: Pessoa().email" style="" />
+                <input name="Nome" type="text" placeholder="Nome" data-bind="value: Pessoa().nome" class="form-control" />
+                <input name="Email" type="text" placeholder="E-mail" data-bind="value: Pessoa().email" class="form-control" />
+                <input name="Cpf" type="text" placeholder="CPF" data-bind="value: Pessoa().cpf" class="form-control" />
+                <input name="Nascimento" type="date" placeholder="Data de Nascimento" data-bind="value: Pessoa().nascimento" class="form-control" />
                 <hr />
-                <button style="margin:10px" class="btn btn-primary" type="submit">Salvar</button>
-                <button class="btn btn-danger" data-bind="click: cancel">Voltar</button>
+                <div class="text-center mb-2">
+                    <button style="margin:10px" class="btn btn-primary" type="submit">Salvar</button>
+                    <button class="btn btn-danger" data-bind="click: cancel">Voltar</button>
+                </div>
             </form>
         </div>
 
-
+        <div id="inputPessoas" data-bind="if:createMode()" style="position:absolute;left:35%;background-color:gainsboro; width:600px">
+            <h1 class="text-center">Cadastrar</h1>
+            <form data-bind="submit: addPessoa">
+                <input name="Nome" type="text" placeholder="Nome" data-bind="value: nome" class="form-control" />
+                <input name="Email" type="text" placeholder="E-mail" data-bind="value: email" class="form-control" />
+                <input name="Cpf" type="text" placeholder="CPF" data-bind="value: cpf" class="form-control" />
+                <input name="Nascimento" type="date" placeholder="Data de Nascimento" data-bind="value: nascimento" class="form-control" />
+                <hr />
+                <div class="text-center mb-2">
+                    <button class="btn btn-primary" type="submit">Salvar</button>
+                    <button class="btn btn-danger" type="submit" data-bind="click:createModeButtonFalse">Cancelar</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -80,7 +96,12 @@
         self.id = ko.observable(0);
         self.nome = ko.observable("");
         self.email = ko.observable("");
+        self.cpf = ko.observable("");
+        self.nascimento = ko.observable("");
+
         self.searchString = ko.observable("");
+
+        self.createMode = ko.observable("");
 
 
         self.contador = function() {
@@ -90,7 +111,9 @@
         var Pessoa = {
             id: self.id,
             nome: self.nome,
-            email: self.email
+            email: self.email,
+            cpf: self.cpf,
+            nascimento: self.nascimento
         };
 
         self.Pessoa = ko.observable();
@@ -116,7 +139,7 @@
             });
         };
 
-        getPessoasByName =function() {
+        getPessoasByName = function() {
 
             var searchString = self.searchString;
             $.ajax({
@@ -124,7 +147,7 @@
                 url: "/Pessoa/GetPessoasByName",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
-                data: {searchString : searchString},
+                data: { searchString: searchString },
                 success: function(data) {
                     console.log(data);
                     self.Pessoas(data);
@@ -149,12 +172,17 @@
                         self.Pessoas.push(data);
                         self.nome("");
                         self.email("");
+                        self.cpf("");
+                        self.nascimento("");
                         alert("Registro incluído com sucesso");
+                        createModeButtonFalse();
                     },
                     error: function(data) {
                         alert("Insira um email válido e um nome válido");
                         self.nome("");
                         self.email("");
+                        self.cpf("");
+                        self.nascimento("");
                     }
                 });
             }
@@ -213,7 +241,15 @@
 
         cancel = function() {
             self.Pessoa("");
-        }
+        };
+
+        createModeButton = function() {
+            self.createMode(true);
+        };
+        createModeButtonFalse = function() {
+            self.createMode(false);
+        };
+
 
     }
 

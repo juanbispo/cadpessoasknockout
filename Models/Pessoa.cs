@@ -7,13 +7,19 @@ namespace CadPessoas.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required(ErrorMessage ="Informe o Nome")]
+        [Required(ErrorMessage = "Informe o Nome")]
         [StringLength(50, ErrorMessage = "Máximo de 50 caracteres")]
         public string? Nome { get; set; }
 
-        [DataType(DataType.EmailAddress,ErrorMessage="Informe um E-mail Válido")]
-        [StringLength(60,ErrorMessage ="Máximo de 60 caracteres")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "Informe um E-mail Válido")]
+        [StringLength(60, ErrorMessage = "Máximo de 60 caracteres")]
         public string? Email { get; set; }
+
+        public string? Cpf { get; set; }
+
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [DataType(DataType.Date)]
+        public DateTime? Nascimento { get; set; }
 
 
         public bool ValidaEmail()
