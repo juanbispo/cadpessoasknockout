@@ -1,12 +1,22 @@
 ﻿
-<div class="text-start">
-    <button data-bind="click:createModeButton" class="btn btn-primary btn-lg">Cadastrar</button>
-</div>
-<div class="text-center">
-    <form data-bind="submit: getPessoasByName">
-        <input type="text" name="searchString" placeholder="Pesquisar por Nome" data-bind="value: searchString" />
-        <input type="submit" class="btn btn-primary" value="Pesquisar" />
-    </form>
+<div class="row mb-5">
+    <div class="col-2">
+        <button data-bind="click:createModeButton" class="btn btn-primary btn-lg">Cadastrar</button>
+    </div>
+    <div class="col-10">
+        <form data-bind="submit: getPessoasByName" class="row">
+            <div class="col-5">
+                <input class="form-control" type="text" name="searchString" placeholder="Pesquisar por Nome" data-bind="value: searchString" />
+            </div>
+            <div class="col-5">
+                <input class="form-control" type="text" name="searchStringCpf" placeholder="Pesquisar por Cpf" data-bind="value: searchStringCpf" oninput="mascara(this)" />
+            </div>
+            <div class="col-2">
+                <input type="submit" class="btn btn-info" value="Pesquisar" />
+            </div>
+        </form>
+    </div>
+
 </div>
 
 <div id="container-fluid">
@@ -37,10 +47,10 @@
                 <tfoot>
                     <tr>
                         <td></td>
-                        <td>
+                        <td colspan="2">
                             <h4> Total de Pessoas: </h4>
                         </td>
-                        <td>
+                        <td colspan="1">
                             <h4 data-bind="text: contador()"></h4>
                         </td>
                     </tr>
@@ -54,7 +64,7 @@
             <form data-bind="submit: updatePessoa">
                 <input name="Nome" type="text" placeholder="Nome" data-bind="value: Pessoa().nome" class="form-control" />
                 <input name="Email" type="email" placeholder="E-mail" data-bind="value: Pessoa().email" class="form-control" />
-                <input name="Cpf" type="text" placeholder="CPF" data-bind="value: Pessoa().cpf" class="form-control" />
+                <input name="Cpf" type="text" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="CPF (somente números)" data-bind="value: Pessoa().cpf" class="form-control" oninput="mascara(this)" />
                 <input name="Nascimento" type="date" placeholder="Data de Nascimento" data-bind="value: Pessoa().nascimento" class="form-control" />
                 <hr />
                 <div class="text-center mb-2">
@@ -69,7 +79,7 @@
             <form data-bind="submit: addPessoa">
                 <input name="Nome" type="text" placeholder="Nome" data-bind="value: nome" class="form-control" />
                 <input name="Email" type="email" placeholder="E-mail" data-bind="value: email" class="form-control" />
-                <input name="Cpf" type="text" placeholder="CPF" data-bind="value: cpf" class="form-control" />
+                <input name="Cpf" type="text" placeholder="CPF (somente números)" data-bind="value: cpf" class="form-control" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" oninput="mascara(this)" />
                 <input name="Nascimento" type="date" placeholder="Data de Nascimento" data-bind="value: nascimento" class="form-control" />
                 <hr />
                 <div class="text-center mb-2">
@@ -89,6 +99,20 @@
 
 <script type="text/javascript">
 
+    function mascara(i) {
+
+        var v = i.value;
+
+        if (isNaN(v[v.length - 1])) { // impede entrar outro caractere que não seja número
+            i.value = v.substring(0, v.length - 1);
+            return;
+        }
+
+        i.setAttribute("maxlength", "14");
+        if (v.length == 3 || v.length == 7) i.value += ".";
+        if (v.length == 11) i.value += "-";
+
+    }
 
     function AppViewModel() {
 
@@ -100,6 +124,7 @@
         self.nascimento = ko.observable("");
 
         self.searchString = ko.observable("");
+        self.searchStringCpf = ko.observable("");
 
         self.createMode = ko.observable("");
 
@@ -134,7 +159,7 @@
                     self.Pessoas(data);
                 },
                 error: function(error) {
-                    alert(error.status + "<--and--> " + error.statusText);
+                    alert(error.status + ", " + error.statusText);
                 }
             });
         };
@@ -142,19 +167,26 @@
         getPessoasByName = function() {
 
             var searchString = self.searchString;
+            var searchStringCpf = self.searchStringCpf;
+
             $.ajax({
                 type: "GET",
                 url: "/Pessoa/GetPessoasByName",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
-                data: { searchString: searchString },
+                data: 
+                { 
+                    searchString: searchString , 
+                    searchStringCpf : searchStringCpf
+                },
                 success: function(data) {
                     console.log(data);
                     self.Pessoas(data);
                     self.searchString("");
+                    self.searchStringCpf("");
                 },
                 error: function(error) {
-                    alert(error.status + "<--and--> " + error.statusText);
+                    alert(error.status + ", " + error.statusText);
                 }
             });
         };
@@ -179,7 +211,7 @@
                         createModeButtonFalse();
                     },
                     error: function(data) {
-                        alert("Insira um email válido e um nome válido");
+                        alert(error.status + ", " + error.statusText);
                         self.nome("");
                         self.email("");
                         self.cpf("");
@@ -207,7 +239,7 @@
                         alert("Registro excluido com sucesso");
                     },
                     error: function() {
-                        alert("Falhou");
+                        alert(error.status + ", " + error.statusText);
                     }
                 });
             }
@@ -233,7 +265,7 @@
                     alert('Registro Atualizado');
                 },
                 error: function(data) {
-                    alert("Falhou!");
+                    alert(error.status + ", " + error.statusText);
                     self.Pessoa("");
                 }
             });

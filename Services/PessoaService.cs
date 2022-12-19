@@ -38,9 +38,27 @@ namespace CadPessoas.Services
                 throw new Exception();
             }
         }
-        public List<Pessoa> GetPessoasByName(string searchString)
+        public List<Pessoa> GetPessoasByName(string searchString , string searchStringCpf)
         {
-            var pessoas = _context.Pessoas.Where(p=>p.Nome.ToLower().Contains(searchString.ToLower())).ToList();
+            var pessoas = new List<Pessoa>();
+
+            if (string.IsNullOrEmpty(searchString))
+            {
+                pessoas = _context.Pessoas
+                    .Where(p=>p.Cpf.Contains(searchStringCpf)).ToList();
+            }
+            if (string.IsNullOrEmpty(searchStringCpf))
+            {
+                pessoas = _context.Pessoas
+                    .Where(p => p.Nome.ToLower().Contains(searchString.ToLower()))
+                    .ToList();
+            }
+            if (!string.IsNullOrEmpty(searchStringCpf) && !string.IsNullOrEmpty(searchString))
+            {
+                pessoas = _context.Pessoas
+                    .Where(p => p.Nome.ToLower().Contains(searchString.ToLower()) && p.Cpf.Contains(searchStringCpf))
+                    .ToList();
+            }
 
             return pessoas;
         }

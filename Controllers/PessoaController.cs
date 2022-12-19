@@ -36,19 +36,18 @@ namespace CadPessoas.Controllers
             }
         }
 
-        public JsonResult GetPessoasByName([FromQuery] string searchString)
+        public JsonResult GetPessoasByName([FromQuery] string searchString,[FromQuery] string searchStringCpf)
         {
             try
             {
                 var lista = new List<Pessoa>();
-                if (String.IsNullOrEmpty(searchString))
+                if (String.IsNullOrEmpty(searchString) && String.IsNullOrEmpty(searchStringCpf))
                 {
                     lista = _pessoaService.GetPessoas();
+                    return Json(lista);
                 }
-                else
-                {
-                    lista = _pessoaService.GetPessoasByName(searchString);
-                }
+
+                lista = _pessoaService.GetPessoasByName(searchString, searchStringCpf);
 
                 return Json(lista);
             }
@@ -63,7 +62,11 @@ namespace CadPessoas.Controllers
         {
             try
             {
-                    
+                if (!ModelState.IsValid)
+                {
+                    throw new Exception();
+                }
+
                 _pessoaService.AddPessoa(pessoa);
                 return Json(pessoa);
             }
