@@ -53,6 +53,15 @@
                         <td colspan="1">
                             <h4 data-bind="text: contador()"></h4>
                         </td>
+                        <td>
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination">
+                                    <li class="page-item"><a class="page-link" data-bind="click: getPessoasPagination(1)">1</a></li>
+                                    <li class="page-item"><a class="page-link" data-bind="click: getPessoasPagination(2)">2</a></li>
+                                    <li class="page-item"><a class="page-link" data-bind="click: getPessoasPagination(3)">3</a></li>
+                                </ul>
+                            </nav>
+                        </td>
                     </tr>
                 </tfoot>
             </table>
@@ -125,6 +134,7 @@
 
         self.searchString = ko.observable("");
         self.searchStringCpf = ko.observable("");
+        self.pageNumber = ko.observable(1);
 
         self.createMode = ko.observable("");
 
@@ -149,11 +159,37 @@
 
         function GetPessoas() {
 
+
             $.ajax({
                 type: "GET",
                 url: "/Pessoa/GetPessoas",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
+                data: {
+                    pageNumber: 1
+                },
+                success: function(data) {
+                    console.log(data);
+                    self.Pessoas(data);
+                },
+                error: function(error) {
+                    alert(error.status + ", " + error.statusText);
+                }
+            });
+        };
+
+        getPessoasPagination = function (page) {
+
+            pageNumber = page;
+
+            $.ajax({
+                type: "GET",
+                url: "/Pessoa/GetPessoas",
+                contentType: "application/json; charset=utf-8",
+                dataType: 'json',
+                data: {
+                    pageNumber: pageNumber
+                },
                 success: function(data) {
                     console.log(data);
                     self.Pessoas(data);
@@ -174,10 +210,10 @@
                 url: "/Pessoa/GetPessoasByName",
                 contentType: "application/json; charset=utf-8",
                 dataType: 'json',
-                data: 
-                { 
-                    searchString: searchString , 
-                    searchStringCpf : searchStringCpf
+                data:
+                {
+                    searchString: searchString,
+                    searchStringCpf: searchStringCpf
                 },
                 success: function(data) {
                     console.log(data);

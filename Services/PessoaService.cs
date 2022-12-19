@@ -26,11 +26,16 @@ namespace CadPessoas.Services
             }
         }
 
-        public List<Pessoa> GetPessoas()
+        public List<Pessoa> GetPessoas(int pageNumber)
         {
             try
             {
-                var pessoas = _context.Pessoas.ToList();
+                var pessoas = _context.Pessoas
+                    .OrderBy(p=>p.Nome)
+                    .Skip((pageNumber-1)*10)
+                    .Take(10)
+                    .ToList();
+
                 return pessoas;
             }
             catch

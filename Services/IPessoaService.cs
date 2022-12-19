@@ -6,7 +6,7 @@ namespace CadPessoas.Services
     {
         public void AddPessoa(Pessoa pessoa);
         public Pessoa RemovePessoa(int id);
-        public List<Pessoa> GetPessoas();
+        public List<Pessoa> GetPessoas(int pageNumber);
 
         public List<Pessoa> GetPessoasByName(string searchString, string searchStringCpf);
         public void EditPessoa(Pessoa pessoa);

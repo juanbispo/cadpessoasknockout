@@ -22,11 +22,11 @@ namespace CadPessoas.Controllers
             return View();
         }
         [HttpGet]
-        public JsonResult GetPessoas()
+        public JsonResult GetPessoas([FromQuery]int pageNumber)
         {
             try
             {
-                var lista = _pessoaService.GetPessoas();
+                var lista = _pessoaService.GetPessoas(pageNumber);
 
                 return Json(lista);
             }
@@ -43,7 +43,7 @@ namespace CadPessoas.Controllers
                 var lista = new List<Pessoa>();
                 if (String.IsNullOrEmpty(searchString) && String.IsNullOrEmpty(searchStringCpf))
                 {
-                    lista = _pessoaService.GetPessoas();
+                    lista = _pessoaService.GetPessoas(1);
                     return Json(lista);
                 }
 
