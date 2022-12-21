@@ -245,7 +245,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     success: function(data) {
-                        self.Pessoas.push(data);
+                        getPessoasPagination(self.page);
                         self.nome("");
                         self.email("");
                         self.cpf("");
@@ -278,7 +278,7 @@
                     contentType: "application/json; charset=utf-8",
                     dataType: 'json',
                     success: function(data) {
-                        self.Pessoas.remove(Pessoa);
+                        getPessoasPagination(self.page);
                         alert("Registro excluido com sucesso");
                     },
                     error: function() {
@@ -304,7 +304,7 @@
                 dataType: 'json',
                 success: function(data) {
                     self.Pessoa("");
-                    GetPessoas();
+                    getPessoasPagination(self.page);
                     alert('Registro Atualizado');
                 },
                 error: function(data) {
